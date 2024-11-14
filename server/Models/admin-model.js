@@ -3,14 +3,15 @@ const mongoose = require("mongoose");
 const adminSchema = mongoose.Schema({
   email: {
     type: String,
-    required: [true, "Provide email"], // if no email then whats the point 
+    required: [true, "Provide email"],
   },
   password: {
     type: String,
-    required: [true, "Provide Password"], // thanks beyonce 
+    required: [true, "Provide Password"],
   },
   refreshToken: {
-    type: String, // why string coz why not
+    type: String,
   },
 });
+
 module.exports = mongoose.model("Admin", adminSchema);
