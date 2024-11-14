@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: "50mb" })); // Middleware to parse the body from client
 
 app.use("/api/tourists", touristRoutes);
+app.use("/api/agencies", agencyRoutes);
 
 app.use(errorHandler);
 app.listen(port, () => console.log(`Server Running on Port N.O ${port} \n`));
