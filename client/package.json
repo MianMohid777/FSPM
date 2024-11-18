@@ -1,0 +1,74 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3002",
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.15",
+    "@mui/material": "^5.15.15",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.17",
+    "@mui/system": "^5.15.15",
+    "@mui/x-charts": "^7.4.0",
+    "@react-google-maps/api": "^2.19.3",
+    "@reduxjs/toolkit": "^2.2.1",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-material-ui-carousel": "^3.4.2",
+    "react-redux": "^9.1.0",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "^5.0.1",
+    "react-slideshow-image": "^4.3.1",
+    "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^3.1.0",
+    "styled-components": "^6.1.8",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "scss": "sass --whatch scss -o css"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-class-properties": "^7.24.1",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.24.1",
+    "@babel/plugin-transform-numeric-separator": "^7.24.1",
+    "@babel/plugin-transform-private-methods": "^7.24.1",
+    "@babel/plugin-transform-private-property-in-object": "^7.24.1",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@rollup/plugin-terser": "^0.4.4",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.72.0",
+    "source-map-loader": "^5.0.0",
+    "svgo": "^2.8.0"
+  }
+}
