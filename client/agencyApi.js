@@ -15,6 +15,7 @@ const agencyGetAllApi = api.injectEndpoints({
             }),
         };
     },
+    
 });
 
 const getAdminApi = api.injectEndpoints({
