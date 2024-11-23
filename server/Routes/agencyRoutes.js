@@ -28,6 +28,21 @@ router.route("/register").post(registerAgency);
 
 router.route("/refresh-token").post(refreshAccessToken);
 router.route("/current-agency").get(validateToken, getCurrentAgency);
-router.route("/current-agency/tours/:id").get(validateToken, getAllTours);
+router
+    .route("/current-agency/tours/:id")
+    .get(validateToken, getAllTours)
+    .put(validateToken, updateTours_ActiveComplete);
+
+router.route("/current-agency/tours/:id/:flag/:tid").put(updateToursStatus);
+
+router
+    .route("/current-agency/publish-tour/:id")
+    .post(validateToken, publishTour);
+
+router
+    .route("/current-agency/profile/:id")
+    .get(validateToken, getAgencyProfile)
+    .put(validateToken, updateAgencyProfile)
+    .post(createProfile);
 
 module.exports = router;

@@ -34,5 +34,8 @@ router
     .post();
 
 router.route("/current-admin/logout").post(validateToken, logOut);
+router
+    .route("/current-admin/applications/init-profile/:id")
+    .post(validateToken, createProfile);
 
 module.exports = router;

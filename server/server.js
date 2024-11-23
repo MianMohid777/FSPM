@@ -27,5 +27,7 @@ app.use("/api/agencies", agencyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", oauthRoutes);
 
+app.use("/api/static", fileRoutes);
+
 app.use(errorHandler);
 app.listen(port, () => console.log(`Server Running on Port N.O ${port} \n`));

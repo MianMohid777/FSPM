@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
+const agencyProfile = require("../Models/agencyModel");
 const Tour = require("../Models/tourModel");
+// const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -278,10 +280,390 @@ const getAllTours = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Create and publish a new tour
+// @route   POST /api/agencies/current-agency/publish-tour/:id
+// @access  Private
+const publishTour = asyncHandler(async (req, res) => {
+    const userId = req.params.id;
+
+    if (userId !== req.user.id.toString()) {
+        res.status(401);
+        throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+        res.status(404);
+        throw new Error("Agency Not Found");
+    }
+
+    const {
+        tourAgencyName,
+        tourStartDate,
+        tourEndDate,
+        tourLocationName,
+        tourLocationImage,
+        tourRegistrationEndDate,
+        tourInformation,
+        tourStatus,
+        tourPrice,
+        tourPlan,
+        tourLocationLink,
+        tourMaxSlots,
+    } = req.body;
+
+    if (!tourStartDate) {
+        res.status(400);
+        throw new Error("Tour start date is mandatory");
+    }
+
+    if (!tourEndDate) {
+        res.status(400);
+        throw new Error("Tour end date is mandatory");
+    }
+
+    if (!tourAgencyName) {
+        res.status(400);
+        throw new Error("Tour agency name is mandatory");
+    }
+
+    if (!tourLocationName) {
+        res.status(400);
+        throw new Error("Tour location name is mandatory");
+    }
+
+    if (!tourLocationImage) {
+        res.status(400);
+        throw new Error("Tour location image is mandatory");
+    }
+
+    if (!tourRegistrationEndDate) {
+        res.status(400);
+        throw new Error("Tour registration end date is mandatory");
+    }
+
+    if (!tourInformation) {
+        res.status(400);
+        throw new Error("Tour information is mandatory");
+    }
+
+    if (!tourStatus) {
+        res.status(400);
+        throw new Error("Tour status is mandatory");
+    }
+
+    if (!tourPrice) {
+        res.status(400);
+        throw new Error("Tour Price is mandatory");
+    }
+
+    if (!tourPlan) {
+        res.status(400);
+        throw new Error("Tour plan is mandatory");
+    }
+
+    if (!tourLocationLink) {
+        res.status(400);
+        throw new Error("Location link is mandatory");
+    }
+
+    if (!tourMaxSlots) {
+        res.status(400);
+        throw new Error("Max slots is mandatory");
+    }
+
+    // Create the tour in the database
+    const newTour = await Tour.create({
+        tourAgencyId: userId,
+        tourAgencyName,
+        tourLocationName,
+        tourLocationImage,
+        tourStartDate,
+        tourEndDate,
+        tourRegistrationEndDate,
+        tourInformation,
+        tourStatus,
+        tourPrice,
+        tourPlan,
+        tourLocationLink,
+        tourMaxSlots,
+    });
+
+    res.status(201).json({
+        message: "Tour created and published successfully",
+        tour: newTour,
+    });
+});
+
+//@desc GET TOURS ON SEARCH
+//@route Post /api/agencies/current-agency/search/:value
+//@access private
+const getSearchedTour = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        if (userId !== req.user.id.toString()) {
+            res.status(401);
+            throw new Error("Unauthorized Access");
+        }
+
+        const agency = await agencyReg.findById(userId);
+
+        if (!agency) {
+            res.status(404);
+            throw new Error("Agency Not Found");
+        }
+
+        const search = req.params.value;
+        console.log(search);
+        const tours = await tour.find({
+            $and: [
+                {
+                    $or: [
+                        { tourInformation: { $regex: search, $options: "i" } },
+                        { tourLocationName: { $regex: search, $options: "i" } },
+                    ],
+                },
+                { tourStatus: "Active" },
+            ],
+        });
+
+        res.status(200).json({
+            message: "Success",
+            tours: tours,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({ message: e.message });
+    }
+});
+
+//@desc Get All Ended Ads
+//@route Post /api/agencies/current-agency/tours/history/:id
+//@access private
+const getPastTours = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        if (userId !== req.user.id.toString()) {
+            res.status(401);
+            throw new Error("Unauthorized Access");
+        }
+
+        const agency = await agencyReg.findById(userId);
+
+        if (!agency) {
+            res.status(404);
+            throw new Error("Agency Not Found");
+        }
+
+        const tours = await Tour.find({
+            tourAgencyId: userId,
+            $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
+        }).sort({ createdAt: "desc" });
+
+        console.log(tours);
+
+        res.status(200).json({
+            message: "Success",
+            tours: tours,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({ message: e.message });
+    }
+});
+
+const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const agency = await agencyReg.findById(userId);
+
+        if (!agency) {
+            res.status(404);
+            throw new Error("Agency Not Found");
+        }
+        const currentDate = new Date();
+
+        const toursActive = await Tour.updateMany(
+            {
+                tourAgencyId: userId,
+                tourStartDate: { $lte: currentDate },
+                tourStatus: "Registeration-Opened",
+            },
+            { tourStatus: "Active" },
+            { new: true }
+        );
+
+        const toursComplete = await Tour.updateMany(
+            {
+                tourAgencyId: userId,
+                tourEndDate: { $lt: currentDate },
+                tourStatus: "Active",
+            },
+            { tourStatus: "Completed" },
+            { new: true }
+        );
+        console.log(toursActive, toursComplete);
+
+        res.status(200).json({
+            message: "Successfully, Updated",
+            ActiveTours: toursActive,
+            CompleteTours: toursComplete,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({ message: e.message });
+    }
+});
+
+const updateToursStatus = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const tourId = req.params.tid;
+        const flag = req.params.flag;
+
+        const agency = await agencyReg.findById(userId);
+
+        if (!agency) {
+            res.status(404);
+            throw new Error("Agency Not Found");
+        }
+
+        let updatedTour = "";
+        if (flag === "true") {
+            const tour = await Tour.updateOne(
+                {
+                    tourAgencyId: userId,
+                    _id: tourId,
+                    tourStatus: "Upcoming",
+                },
+                { tourStatus: "Registrations-Opened" },
+                { new: true }
+            );
+            updatedTour = tour;
+        } else if (flag === "false") {
+            const tour = await Tour.updateOne(
+                {
+                    tourAgencyId: userId,
+                    _id: tourId,
+                    tourStatus: "Registrations-Opened",
+                },
+                { tourStatus: "Upcoming" },
+                { new: true }
+            );
+            updatedTour = tour;
+        } else {
+            res.status(404);
+            throw new Error("Tour Not Found");
+        }
+        console.log(updatedTour);
+        res.status(200).json({
+            message: "Successfully, Updated",
+            Updated_Tour_Res: updatedTour,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({ message: e.message });
+    }
+});
+
+const getAgencyProfile = asyncHandler(async (req, res) => {
+    const userId = req.params.id;
+    console.log("UserId", userId);
+
+    const agency = await agencyProfile.findOne({ agencyId: userId });
+
+    if (!agency) {
+        res.status(404);
+        throw new Error("Agency Profile Not Found");
+    }
+    res.status(200).json({
+        message: "Success",
+        profile: agency,
+    });
+});
+
+const createProfile = asyncHandler(async (req, res) => {
+    const userId = req.params.id;
+
+    const {
+        name,
+        phoneNumber,
+        description,
+        profilePicture,
+        gallery,
+        webiste,
+        socialMediaLinks,
+    } = req.body;
+    console.log("UserId", userId);
+
+    const agency = await agencyReg.findOne({ _id: userId });
+
+    if (!agency) {
+        res.status(404);
+        throw new Error("Agency Profile Not Found");
+    }
+    const exProfile = await agencyProfile.findOne({ agencyId: userId });
+    if (exProfile) {
+        res.status(404);
+        throw new Error("Agency Profile Already Exists");
+    }
+    const profile = await agencyProfile.create({
+        agencyId: userId,
+        name,
+        phoneNumber,
+        description,
+        profilePicture,
+        gallery,
+        webiste,
+        socialMediaLinks,
+    });
+
+    res.status(200).json({
+        message: "Success",
+        profile: profile,
+    });
+});
+const updateAgencyProfile = asyncHandler(async (req, res) => {
+    const userId = req.params.id;
+    const updatedData = req.body;
+
+    console.log("Data to update:", updatedData);
+
+    const updatedAgency = await agencyProfile.findOneAndUpdate(
+        { agencyId: userId },
+        updatedData,
+        { new: true }
+    );
+
+    console.log("Updated Agency with Data", updatedAgency);
+
+    if (!updatedAgency) {
+        res.status(404);
+        throw new Error("Agency Not Found");
+    }
+
+    res.status(200).json({
+        message: "Agency Profile Updated Successfully",
+        agency: updatedAgency,
+    });
+});
+
 module.exports = {
     registerAgency,
     loginAgency,
     refreshAccessToken,
     getCurrentAgency,
     getAllTours,
+    publishTour,
+    getSearchedTour,
+    getPastTours,
+    updateTours_ActiveComplete,
+    getAgencyProfile,
+    updateAgencyProfile,
+    updateToursStatus,
+    createProfile,
 };
