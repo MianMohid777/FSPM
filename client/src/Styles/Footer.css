@@ -1,0 +1,131 @@
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 100px;
+  
+  }
+  
+  footer .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 50px;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  
+  footer .container1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  
+  
+  footer .container1 .text {
+  
+  
+    font-family: 'Laila';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  
+    color: #000000;
+  
+  
+  }
+  
+  footer .container1 .text2 {
+  
+  
+    width: 290.97px;
+    height: 67.47px;
+  
+  
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 124.5%;
+  
+    color: #5E6282;
+  
+  
+  }
+  
+  footer .container2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  footer .container2 .row {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  footer .container2 .heading {
+  
+  
+    width: 151.81px;
+    height: 36.55px;
+    margin-bottom: 47px;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 124.5%;
+    /* or 26px */
+  
+    /* black */
+    color: #080809;
+  
+  
+  }
+  
+  footer .container2 .text2 {
+  
+    width: 150.31px;
+    height: 30.92px;
+  
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 124.5%;
+    /* or 22px */
+  
+    /* TEXT CLR */
+    color: #5E6282;
+  
+  
+  }
+  
+  footer .footnote {
+    /* Copyrights */
+  
+    position: absolute;
+    width: 285.35px;
+    height: 23.9px;
+    margin-top: 450px;
+  
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 124.5%;
+    /* or 17px */
+  
+    /* TEXT CLR */
+    color: #5E6282;
+  
+  
+  }

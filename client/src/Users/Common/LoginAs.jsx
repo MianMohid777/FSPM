@@ -69,12 +69,9 @@ function LoginAsGroup() {
             fontSize: "18px",
             width: "100%",
           }}
-          endIcon={<ArrowForwardIcon sx={{ width: "30px" }} />}
-          onClick={() => {
-            navigate("/admin-login");
-          }}
+
         >
-          Login as Admin
+          Login as Tour Guide
         </Button>
       </ButtonGroup>
     </div>

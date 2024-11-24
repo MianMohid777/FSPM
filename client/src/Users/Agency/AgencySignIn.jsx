@@ -341,9 +341,6 @@ function AgencySignIn() {
                     color: "#009ee2",
                   },
                 }}
-                onClick={() => {
-                  navigate("/agency-registration");
-                }}
               >
                 {" "}
                 Register Now
